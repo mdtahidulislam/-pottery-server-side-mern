@@ -13,7 +13,7 @@ const client = new MongoClient(uri);
 app.use(cors())
 app.use(express.json())
 
-// connect DBs
+// connect DB
 async function run() {
     try {
         await client.connect();
