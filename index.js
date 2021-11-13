@@ -21,6 +21,7 @@ async function run() {
         const database = client.db("Pottery");
         const potteriesCollection = database.collection("potteries");
         const ordersCollection = database.collection("orders");
+        const reviewsCollection = database.collection("reviews");
 
         // GET API 6 POTTERIES
         app.get('/potteries', async (req, res) => {
@@ -68,6 +69,20 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const result = await ordersCollection.deleteOne(query)
             res.json(result);
+        })
+
+        // POST REVIEW
+        app.post('/reviews', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewsCollection.insertOne(newReview);
+            res.send(result);
+        })
+        // GET REVIEW
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewsCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.json(reviews);
         })
 
     } finally {
