@@ -32,6 +32,13 @@ async function run() {
             res.json(potteries)
         })
 
+        // POST POTTERIES
+        app.post('/potteries', async (req, res) => {
+            const pottery = req.body;
+            const result = await potteriesCollection.insertOne(pottery);
+            res.json(result);
+        })
+
         // GET API ALL POTTERIES
         app.get('/allpotteries', async (req, res) => {
             const query = {};
@@ -46,6 +53,14 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const pottery = await potteriesCollection.findOne(query);
             res.send(pottery);
+        })
+
+        // DELETE API (POTTERY)
+        app.delete('/potteries/:potId', async (req, res) => {
+            const id = req.params.potId;
+            const query = { _id: ObjectId(id) }
+            const result = await potteriesCollection.deleteOne(query)
+            res.json(result);
         })
 
         // POST ORDER
