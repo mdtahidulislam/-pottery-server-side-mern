@@ -70,13 +70,36 @@ async function run() {
             res.send(result);
         })
 
-        // GET API (Order)
+        // GET API (Order by email)
         app.get('/orders', async (req, res) => {
             const userEmail = req.query.userEmail;
             const query = { userEmail: userEmail };
             const cursor = ordersCollection.find(query);
             const orders = await cursor.toArray();
             res.json(orders);
+        })
+
+        // GET API (All Order)
+        app.get('/allorders', async (req, res) => {
+            const query = {};
+            const cursor = ordersCollection.find(query);
+            const orders = await cursor.toArray();
+            res.json(orders);
+        })
+
+        // UPDATE ORDER
+        app.put('/orders/:orderId', async (req, res) => {
+            const id = req.params.orderId;
+            const order = req.body;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    orderStatus: order.orderStatus
+                },
+            };
+            const result = await ordersCollection.updateOne(filter, updateDoc, options)
+            res.json(result);
         })
 
         // DELETE API (Order)
